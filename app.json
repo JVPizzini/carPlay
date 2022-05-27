@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "carPlay",
+    "slug": "carPlay",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
