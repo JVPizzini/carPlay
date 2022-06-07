@@ -94,6 +94,7 @@ export function SchedulingDetails() {
         setIsLoading(false);
       });
   }
+  //
 
   function handleBack() {
     navigation.goBack();
