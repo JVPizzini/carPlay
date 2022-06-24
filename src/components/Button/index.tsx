@@ -24,9 +24,9 @@ export function Button({
   ...rest
 }: Props) {
   return (
-    <Container color={color} {...rest}>
+    <Container color={color} enabled={!isLoading} {...rest}>
       <Title light={light}>{title} </Title>
-      {isLoading && <Load color={colorLoading} size={sizeLoading} flex={0}/>}
+      {isLoading && <Load color={colorLoading} size={sizeLoading} flex={0} />}
     </Container>
   );
 }

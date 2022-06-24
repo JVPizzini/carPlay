@@ -64,7 +64,6 @@ export function SchedulingDetails() {
     total: dates.length * car.rent.price,
     multiple: dates.length,
   };
-
   async function handleSchedulingComplete() {
     setIsLoading(true);
     const { data } = await api.get(`/schedules_bycars/${car.id}`);
@@ -94,11 +93,10 @@ export function SchedulingDetails() {
         setIsLoading(false);
       });
   }
-  //
-
   function handleBack() {
     navigation.goBack();
   }
+
   return (
     <Container>
       <StatusBar translucent style="dark" />
