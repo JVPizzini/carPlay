@@ -1,31 +1,71 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { Keyboard, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Keyboard, KeyboardAvoidingView, Platform } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useTheme } from "styled-components/native";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
+import * as Yup from "yup";
+import { useNavigation } from "@react-navigation/native";
+import {
+  Container,
+  Header,
+  Title,
+  SubTitle,
+  Form,
+  Footer,
+  Text,
+} from "./styles";
 
-import { Container, Header, Title, SubTitle, Form, Footer } from "./styles";
+//interfaces and types
+// interface SignInProps {
+//   email: string;
+//   password: string;
+// }
+interface ErrorProps {
+  key: string;
+  msg: string;
+}
 
 export function SignIn() {
   const { colors } = useTheme();
-  const [signIn, setSignIn] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [focused, setFocused] = useState(false);
+  const [status, setStatus] = useState<ErrorProps[]>([]);
 
-  function handleSignIn() {}
+  const navigation = useNavigation();
+
+  const schema = Yup.object().shape({
+    email: Yup.string().required("E-mail is required"),
+    password: Yup.string().required("Password is required"),
+  });
+
+  function handleNewAccount() {
+    navigation.navigate("SignUpFirstStep");
+  }
+
+  async function handleSignIn() {
+    try {
+      await schema.validate({ email, password }, { abortEarly: false });
+      //Fazer login
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        const errors: ErrorProps[] = error.inner.map((e) => ({
+          key: String(e.path),
+          msg: e.message,
+        }));
+
+        setStatus(errors);
+      } else {
+        Alert.alert("Error: ", error.message);
+      }
+    }
+  }
 
   return (
-    <KeyboardAvoidingView
-      // behavior={Platform.OS === "ios" ? "padding" : "height"}
-      behavior="position"
-      enabled
-    >
-      <TouchableWithoutFeedback
-        onPress={Keyboard.dismiss}
-        // containerStyle={{ flex: 1 }}
-        // style={{ flex: 1 }}
-      >
+    <KeyboardAvoidingView behavior="position" enabled>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <StatusBar style={"dark"} backgroundColor="transparent" />
         <Container>
           <Header>
@@ -37,32 +77,44 @@ export function SignIn() {
               iconName={"mail"}
               placeholder="E-mail"
               placeholderTextColor={colors.background}
-              onChangeText={setSignIn}
-        
+              onChangeText={setEmail}
+              value={email}
             />
+            {!email &&
+              status.map(
+                (item) =>
+                  item.key === "email" && <Text key={item.key}>{item.msg}</Text>
+              )}
             <Input
               inputType="password"
               iconName={"lock"}
               placeholder="Password"
               placeholderTextColor={colors.background}
               onChangeText={setPassword}
- 
+              value={password}
             />
+            {!password &&
+              status.map(
+                (item) =>
+                  item.key === "password" && (
+                    <Text key={item.key}>{item.msg}</Text>
+                  )
+              )}
           </Form>
           <Footer>
             <Button
               title="SignIn"
               color={colors.bookplay_New}
               colorLoading={colors.shape}
-              isLoading
+              // isLoading
               sizeLoading={"small"}
-              onPress={() => {}}
+              onPress={handleSignIn}
             />
             <Button
               title="Create new account"
               color={colors.shape}
               light
-              onPress={() => {}}
+              onPress={handleNewAccount}
             />
           </Footer>
         </Container>

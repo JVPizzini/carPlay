@@ -86,8 +86,8 @@ export const Footer = styled.View`
     padding: 24px
       ${Dimensions.get("window").width >= 800 ? RFValue(80) : RFValue(24)}px
       ${getBottomSpace() + 24}px;
-      background-color: ${theme.colors.shape};
-      `}
+    background-color: ${theme.colors.shape};
+  `}
 `;
 
 export const RentalPeriod = styled.View`

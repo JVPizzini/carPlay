@@ -19,6 +19,7 @@ export const Container = styled(RectButton)<ButtonProps>`
   justify-content: center;
   background-color: ${({ color, theme }) =>
     color ? color : theme.colors.background};
+  opacity: ${({ enabled }) => (enabled ? 1 : 0.5)};
   margin-bottom: 8px;
   flex-direction: row;
 `;

@@ -23,7 +23,7 @@ export default {
     title: "#808080",
     text: "#a3a3a3",
     background: "#dcdcdc",
-    gradient100: ["#f2f2f2", "#808080"],
+    gradient100: ["#f2f2f2", "#a3a3a3"],
     gradientColor: ["#f2f2f2", "#2152cf"],
     gradientError: ["#f2f2f2", "#eb5355"],
   },

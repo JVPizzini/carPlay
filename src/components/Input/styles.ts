@@ -1,6 +1,6 @@
 import React from "react";
 import { TextInput } from "react-native";
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 import { LinearGradient, LinearGradientProps } from "expo-linear-gradient";
 import {
   BorderlessButton,
@@ -12,8 +12,8 @@ interface ButtonProps extends BorderlessButtonProps {
   children: React.ReactNode;
 }
 
-interface BorderGradientProps {
-  error: string;
+interface BorderGradientProps extends LinearGradientProps {
+  isFocused: boolean;
 }
 
 export const Container = styled.View`
@@ -23,13 +23,13 @@ export const Container = styled.View`
   margin-top: 5px;
 `;
 
-export const BorderGradient = styled(LinearGradient).attrs<BorderGradientProps>(
-  ({ theme, error }) => ({
-    colors: !error ? theme.colors.gradientError : theme.colors.gradientColor,
-    start: { x: 0.09, y: 0.7 },
-    end: { x: 1, y: 0.7 },
-  })
-)<BorderGradientProps>`
+export const BorderGradient = styled<any>(
+  LinearGradient
+).attrs<BorderGradientProps>(({ theme, isFocused }) => ({
+  colors: isFocused ? theme.colors.gradientColor : theme.colors.gradient100,
+  start: { x: 0.09, y: 0.7 },
+  end: { x: 1, y: 0.7 },
+}))<BorderGradientProps>`
   width: 100%;
 
   padding: 0 1px;

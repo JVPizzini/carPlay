@@ -31,6 +31,12 @@ export const Form = styled.View`
   margin-top: 24px;
 `;
 
+export const Text = styled.Text`
+  font-size: 12px;
+  color: red;
+  margin: 5px 0 0 50px;
+`;
+
 export const Footer = styled.View`
   margin-top: 24px;
 `;
