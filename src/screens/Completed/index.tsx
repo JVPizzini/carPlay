@@ -1,11 +1,10 @@
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useWindowDimensions } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 
 //Assets
-import BookplaySvg from "../../assets/bookplay.svg";
 import PlaySvg from "../../assets/play.svg";
 import DoneSvg from "../../assets/verified.svg";
 
@@ -14,16 +13,20 @@ import { ConfirmButton } from "../../components/ConfirmButton";
 
 //Styled-Components
 import { Container, Content, Title, Message, Footer } from "./styles";
-import { DoneAnimation } from "../../components/Animation/DoneAnimation";
 import { LogBox } from "react-native";
 
-export function SchedulingComplete() {
-  const { width, height } = useWindowDimensions();
+//interfaces and types
+import { CompletedNavigationProps } from "../../../src/@types/navigation/navigation";
 
+export function Completed() {
+  const { width, height } = useWindowDimensions();
+  const route = useRoute();
+
+  const { Props } = route.params as CompletedNavigationProps;
   const navigation = useNavigation<any>();
 
   function handleHome() {
-    navigation.navigate("Home");
+    navigation.navigate(Props.screenName ? Props.screenName : "Home");
   }
 
   LogBox.ignoreLogs([
@@ -52,9 +55,11 @@ export function SchedulingComplete() {
         <DoneSvg width={RFValue(100)} height={RFValue(100)} />
         {/* <DoneAnimation /> */}
 
-        <Title>Rented book</Title>
+        <Title>{Props.title ? Props.title : "Rented book"}</Title>
         <Message>
-          Now you need to go{"\n"} to Bookplay Co.{"\n"} to get the book.
+          {Props.msg
+            ? Props.msg
+            : 'Now you need to go{"\n"} to Bookplay Co.{"\n"} to get the book.'}
         </Message>
       </Content>
 

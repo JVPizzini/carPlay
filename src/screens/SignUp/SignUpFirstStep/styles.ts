@@ -57,14 +57,16 @@ export const Content = styled.View`
 
 export const Form = styled.View`
   width: 100%;
-  height: 32%;
+  /* height: 32%; */
   margin-top: 34px;
   margin-bottom: 30px;
   justify-content: space-between;
+  /* padding-bottom: 50px; */
   /* background-color: green; */
 `;
 
 export const Footer = styled.View`
   
   padding: 0 24px;
+  /* margin-top: 20px; */
 `;

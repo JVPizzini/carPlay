@@ -1,6 +1,8 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
+  ImageEditor,
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
@@ -9,13 +11,17 @@ import {
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useTheme } from "styled-components/native";
 import * as Yup from "yup";
+import { CreateAccountNavigationProps } from "../../../../src/@types/navigation/navigation";
 
 //components
 import { BackButton } from "../../../components/BackButton";
 import { Bullet } from "../../../components/Bullet";
 import { Button } from "../../../components/Button";
+import { ConfirmButton } from "../../../components/ConfirmButton";
+import { Error } from "../../../components/Error";
 import { ImageSlider } from "../../../components/ImageSlider";
 import { Input } from "../../../components/Input";
+import api from "../../../services/api";
 
 //styled-components
 import {
@@ -38,17 +44,33 @@ interface ErrorProps {
 }
 
 export function SignUpSecondStep() {
-  const navigation = useNavigation();
   const { colors } = useTheme();
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { user } = route.params as CreateAccountNavigationProps;
 
   const [status, setStatus] = useState<ErrorProps[]>([]);
+
   const schema = Yup.object().shape({
     password: Yup.string().required("Name is required"),
+    confirmPassword: Yup.string().oneOf(
+      [Yup.ref("password"), null],
+      "Confirm password is different"
+    ),
   });
 
-  async function validate(password: string) {
+  async function validate(password: string, confirmPassword: string) {
     try {
-      await schema.validate(password, { abortEarly: false });
+      await schema.validate(
+        { password, confirmPassword },
+        { abortEarly: false }
+      );
+      return true;
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         const errors: ErrorProps[] = error.inner.map((error) => ({
@@ -57,11 +79,39 @@ export function SignUpSecondStep() {
         }));
         setStatus(errors);
       }
+      return false;
     }
   }
 
-  function handleNextStep() {
-    const obj = {};
+  async function handleSave() {
+    const newUser = {
+      name: user.name,
+      email: user.email,
+      driver_license: user.driver_license,
+      password: password,
+    };
+     
+await api.get('/cars').then(response => console.log(response.data))
+
+    if (!(await validate(password, confirmPassword))) return;
+
+    setIsLoading(true);
+    await api
+      .post("/users", newUser)
+      .then(() => {
+        navigation.navigate("Complete", {
+          Props: {
+            title: "Account registred",
+            msg: `Signin with your \n new account and enjoy `,
+            screenName: "SignIn",
+          },
+        });
+      })
+      .catch((error) => {
+        // console.log(error);
+        Alert.alert("Deu ruim");
+      });
+    setIsLoading(false);
   }
 
   function handleBack() {
@@ -92,21 +142,41 @@ export function SignUpSecondStep() {
                   placeholder="Password"
                   inputType="password"
                   placeholderTextColor={colors.background}
+                  onChangeText={setPassword}
+                  value={password}
                 />
+                {!password &&
+                  status.map(
+                    (item) =>
+                      item.key === "password" && (
+                        <Error key={item.key} msg={item.msg} />
+                      )
+                  )}
                 <Input
                   iconName="lock"
                   placeholder="Confirm password"
                   inputType="password"
                   placeholderTextColor={colors.background}
+                  onChangeText={setConfirmPassword}
+                  value={confirmPassword}
                 />
+                {confirmPassword != password &&
+                  status.map(
+                    (item) =>
+                      item.key === "confirmPassword" && (
+                        <Error key={item.key} msg={item.msg} />
+                      )
+                  )}
               </Form>
             </Content>
 
             <Footer>
               <Button
                 title="Save"
-                color={colors.bookplay_New}
-                onPress={() => {}}
+                color={colors.sucess}
+                onPress={handleSave}
+                isLoading={isLoading}
+                sizeLoading="small"
               />
             </Footer>
           </ScrollView>

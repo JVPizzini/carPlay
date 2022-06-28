@@ -7,7 +7,7 @@ import { Home } from "../screens/Home";
 import { ProductDetails } from "../screens/ProductDetails";
 import { Scheduling } from "../screens/Scheduling";
 import { SchedulingDetails } from "../screens/SchedulingDetails";
-import { SchedulingComplete } from "../screens/SchedulingComplete";
+import { Completed } from "../screens/Completed";
 import { MyCars } from "../screens/MyCars";
 import { Splash } from "../screens/Splash";
 import { SignIn } from "../screens/SignIn";
@@ -30,7 +30,7 @@ export function StackRouters() {
       <Screen name="ProductDetails" component={ProductDetails} />
       <Screen name="Scheduling" component={Scheduling} />
       <Screen name="SchedulingDetails" component={SchedulingDetails} />
-      <Screen name="SchedulingComplete" component={SchedulingComplete} />
+      <Screen name="Complete" component={Completed} />
       <Screen name="MyCars" component={MyCars} />
     </Navigator>
   );

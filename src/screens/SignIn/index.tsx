@@ -16,6 +16,7 @@ import {
   Footer,
   Text,
 } from "./styles";
+import { useAuth } from "../../hooks/auth";
 
 //interfaces and types
 // interface SignInProps {
@@ -31,8 +32,9 @@ export function SignIn() {
   const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [focused, setFocused] = useState(false);
   const [status, setStatus] = useState<ErrorProps[]>([]);
+
+  const { signIn } = useAuth();
 
   const navigation = useNavigation();
 
@@ -48,7 +50,7 @@ export function SignIn() {
   async function handleSignIn() {
     try {
       await schema.validate({ email, password }, { abortEarly: false });
-      //Fazer login
+      signIn({ email, password });
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         const errors: ErrorProps[] = error.inner.map((e) => ({

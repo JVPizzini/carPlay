@@ -64,7 +64,7 @@ export function SchedulingDetails() {
     total: dates.length * car.rent.price,
     multiple: dates.length,
   };
-  async function handleSchedulingComplete() {
+  async function handleComplete() {
     setIsLoading(true);
     const { data } = await api.get(`/schedules_bycars/${car.id}`);
 
@@ -84,7 +84,7 @@ export function SchedulingDetails() {
       .then(() =>
         setTimeout(() => {
           {
-            setIsLoading(false), navigation.navigate("SchedulingComplete");
+            setIsLoading(false), navigation.navigate("Complete");
           }
         }, 3000)
       )
@@ -169,7 +169,7 @@ export function SchedulingDetails() {
         <Button
           title="Rent now"
           color={theme.colors.sucess}
-          onPress={handleSchedulingComplete}
+          onPress={handleComplete}
           isLoading={isLoading}
           colorLoading={theme.colors.shape}
           sizeLoading={"small"}

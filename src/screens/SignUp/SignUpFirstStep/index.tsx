@@ -1,10 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
+  ImagePropTypes,
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
   StatusBar,
+  Text,
 } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useTheme } from "styled-components/native";
@@ -14,8 +16,10 @@ import * as Yup from "yup";
 import { BackButton } from "../../../components/BackButton";
 import { Bullet } from "../../../components/Bullet";
 import { Button } from "../../../components/Button";
+import { Error } from "../../../components/Error";
 import { ImageSlider } from "../../../components/ImageSlider";
 import { Input } from "../../../components/Input";
+import { useAuth } from "../../../hooks/auth";
 
 //styled-components
 import {
@@ -40,21 +44,22 @@ interface FormProps {
   email: string;
   password: string;
   name: string;
-  cnh: string;
+  driver_license?: string;
 }
 
 export function SignUpFirstStep() {
   const navigation = useNavigation();
   const { colors } = useTheme();
+  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [cnh, setCnh] = useState("");
-
+  const [driveLicense, setDriveLicense] = useState("");
+  const { user } = useAuth();
   const [status, setStatus] = useState<ErrorProps[]>([]);
   const schema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string().required("E-mail is required"),
-    cnh: Yup.string().required("Password is required"),
+    driver_license: Yup.string().required("Drive license is required"),
   });
 
   async function validate(obj: FormProps) {
@@ -69,29 +74,35 @@ export function SignUpFirstStep() {
         }));
         setStatus(errors);
       }
+      return false;
     }
   }
 
-  function handleNextStep() {
+  async function handleNextStep() {
     const obj: FormProps = {
       email: email,
       password: "",
       name: name,
-      cnh: cnh,
+      driver_license: driveLicense,
     };
+    if (!(await validate(obj))) return;
 
-    if (!validate(obj)) return;
+    try {
+      setIsLoading(true);
+      navigation.navigate("SignUpSecondStep", { user: obj });
+    } catch (error) {
+      console.log(error);
+    }
 
-    // navigation.navigate("SignUpSecondStep");
+    setIsLoading(false);
   }
 
   function handleBack() {
     navigation.goBack();
   }
-
-  useEffect(() => {
-    console.log(status);
-  }, [status]);
+  // useEffect(() => {
+  //   console.log(user);
+  // }, []);
   return (
     <KeyboardAvoidingView behavior="position" enabled>
       <StatusBar barStyle="light-content" />
@@ -118,6 +129,14 @@ export function SignUpFirstStep() {
                   onChangeText={setName}
                   value={name}
                 />
+                {!name &&
+                  status.map(
+                    (item) =>
+                      item.key === "name" && (
+                        <Error key={item.key} msg={item.msg} />
+                      )
+                  )}
+
                 <Input
                   iconName="mail"
                   placeholder="E-mail"
@@ -125,14 +144,29 @@ export function SignUpFirstStep() {
                   onChangeText={setEmail}
                   value={email}
                 />
+                {!email &&
+                  status.map(
+                    (item) =>
+                      item.key === "email" && (
+                        <Error key={item.key} msg={item.msg} />
+                      )
+                  )}
+
                 <Input
                   iconName="credit-card"
-                  placeholder="CNH"
+                  placeholder="Drive license"
                   keyboardType="numeric"
                   placeholderTextColor={colors.background}
-                  onChangeText={setCnh}
-                  value={cnh}
+                  onChangeText={setDriveLicense}
+                  value={driveLicense}
                 />
+                {!driveLicense &&
+                  status.map(
+                    (item) =>
+                      item.key === "driver_license" && (
+                        <Error key={item.key} msg={item.msg} />
+                      )
+                  )}
               </Form>
             </Content>
             <Footer>
@@ -140,6 +174,9 @@ export function SignUpFirstStep() {
                 title="Next"
                 color={colors.bookplay_New}
                 onPress={handleNextStep}
+                isLoading={isLoading}
+                sizeLoading="small"
+                colorLoading={colors.shape}
               />
             </Footer>
           </ScrollView>

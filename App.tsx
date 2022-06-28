@@ -4,13 +4,8 @@ import * as SplashScreen from "expo-splash-screen";
 import theme from "./src/global/theme";
 import { ThemeProvider } from "styled-components/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { AppProvider } from "./src/hooks";
 
-// import { LogBox } from "react-native";
-
-// LogBox.ignoreLogs([
-//   "ViewPropTypes will be removed from React Native. Migrate to ViewPropTypes exported from 'deprecated-react-native-prop-types'.",
-// ]);
-//Fonts
 import {
   Lato_400Regular,
   Lato_400Regular_Italic,
@@ -38,17 +33,10 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>
-        <Routes />
+        <AppProvider>
+          <Routes />
+        </AppProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
