@@ -10,7 +10,10 @@ import {
 } from "./styles";
 
 interface Props {
-  imagesUrl: string[];
+  imagesUrl: {
+    id: string;
+    photo: string;
+  }[];
 }
 
 interface ChanceImageProps {
@@ -30,9 +33,9 @@ export function ImageSlider({ imagesUrl }: Props) {
   return (
     <Container>
       <ImageIndexes>
-        {imagesUrl.map((_, index) => (
+        {imagesUrl.map((item, index) => (
           <ImageIndex
-            key={String(index)}
+            key={String(item.id)}
             active={index === imageIndex}
           ></ImageIndex>
         ))}
@@ -40,10 +43,10 @@ export function ImageSlider({ imagesUrl }: Props) {
 
       <FlatList
         data={imagesUrl}
-        keyExtractor={(key) => key}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ProductImageWrapper>
-            <ProductImage source={{ uri: item }} resizeMode="contain" />
+            <ProductImage source={{ uri: item.photo }} resizeMode="contain" />
           </ProductImageWrapper>
         )}
         horizontal

@@ -70,7 +70,7 @@ export function Home() {
   });
 
   useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", () => true);
+    // BackHandler.addEventListener("hardwareBackPress", () => true);
     async function fetchCars() {
       try {
         const response = await api.get("/cars");

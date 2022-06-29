@@ -1,5 +1,8 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "strict": true,
+    "experimentalDecorators": true
+  },
   "strick": false,
   "extends": "expo/tsconfig.base",
   "esModuleInterop": true,
