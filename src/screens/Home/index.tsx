@@ -11,7 +11,6 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 
-
 //Animations
 const ButtonAnimated = Animated.createAnimatedComponent(RectButton);
 
@@ -71,14 +70,16 @@ export function Home() {
 
   useEffect(() => {
     // BackHandler.addEventListener("hardwareBackPress", () => true);
+    let isMounted = true;
+
     async function fetchCars() {
       try {
         const response = await api.get("/cars");
-        setCars(response.data);
+        if (isMounted) setCars(response.data);
       } catch (error) {
         console.log(error);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     }
 
@@ -104,8 +105,8 @@ export function Home() {
       </Headers>
       {isLoading ? (
         <Load />
-        // <DoneAnimation />
       ) : (
+        // <DoneAnimation />
         <ProductList
           data={cars}
           keyExtractor={(item) => item.id}

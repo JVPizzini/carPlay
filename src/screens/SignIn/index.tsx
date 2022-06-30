@@ -1,13 +1,14 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { Alert, Keyboard, KeyboardAvoidingView, Platform } from "react-native";
+import { Alert, Keyboard, KeyboardAvoidingView } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { useTheme } from "styled-components/native";
-import { Input } from "../../components/Input";
 import * as Yup from "yup";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../hooks/auth";
+import { useTheme } from "styled-components/native";
 
+//Components
+import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 
 import {

@@ -8,6 +8,7 @@ import { useTheme } from "styled-components/native";
 
 //Screens
 import { Home } from "../screens/Home";
+import { Profile } from "../screens/Profile";
 import { MyCars } from "../screens/MyCars";
 import { AppStackRoutes } from "./app.stack.routes";
 
@@ -53,11 +54,12 @@ export function AppTabRoutes() {
       />
       <Screen
         name="Profile"
-        component={Home}
+        component={Profile}
         options={{
           tabBarIcon: ({ color }) => (
             <AppleSvg width={24} height={24} fill={color} />
           ),
+          tabBarHideOnKeyboard:true,
         }}
       />
     </Navigator>

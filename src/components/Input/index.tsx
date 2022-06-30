@@ -51,6 +51,8 @@ export function Input({ iconName, inputType = "signin", ...rest }: Props) {
               secureTextEntry={isPasswordVisible}
               onFocus={handleInputFocused}
               onBlur={handleInputBlur}
+              placeholderTextColor={colors.background}
+              autoCorrect={false}
             />
             <ButtonPasswordVisible onPress={handleShowPassword}>
               <Feather
@@ -72,6 +74,7 @@ export function Input({ iconName, inputType = "signin", ...rest }: Props) {
             {...rest}
             onFocus={handleInputFocused}
             onBlur={handleInputBlur}
+            placeholderTextColor={colors.background}
           />
         </BorderGradient>
       )}
