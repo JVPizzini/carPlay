@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { useTheme } from "styled-components/native";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -77,16 +77,18 @@ export function ProductDetails() {
     navigation.goBack();
   }
 
+  useEffect(() => {
+    // console.log(car);
+  }, []);
+
   return (
     <Container>
       <StatusBar translucent style="dark" backgroundColor="transparent" />
       <Animated.View style={[headerStyleAnimation]}>
-        <Header >
+        <Header>
           <BackButton onPress={handleBack} />
         </Header>
-        <Animated.View
-          style={[sliderCarsStyleAnimation]}
-        >
+        <Animated.View style={[sliderCarsStyleAnimation]}>
           <ProductImages>
             <ImageSlider imagesUrl={car.photos} />
           </ProductImages>
@@ -96,7 +98,6 @@ export function ProductDetails() {
       <Animated.ScrollView
         contentContainerStyle={{
           paddingHorizontal: 24,
-     //paddingTop: getStatusBarHeight() - 20,
         }}
         showsVerticalScrollIndicator={false}
         onScroll={scrollHandler}

@@ -1,7 +1,8 @@
 import React from "react";
 import { RFValue } from "react-native-responsive-fontsize";
 import { RectButtonProps } from "react-native-gesture-handler";
-import { CarDTO } from "../../dtos/CarDTO";
+// import { CarModel } from "../../dtos/CarModel";
+import {Car as CarModel} from '../../database/model/Car'
 //Svgs
 import Book from "../../assets/closedBook.svg";
 import Audiobook from "../../assets/audiobook2.svg";
@@ -31,7 +32,7 @@ export interface ProductData {
 }
 
 export interface Props extends RectButtonProps {
-  data: CarDTO;
+  data: CarModel;
 }
 
 export function Product({ data, ...rest }: Props) {

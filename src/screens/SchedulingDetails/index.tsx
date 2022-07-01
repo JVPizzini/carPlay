@@ -61,7 +61,7 @@ export function SchedulingDetails() {
   const [isLoading, setIsLoading] = useState(false);
 
   const rentData = {
-    total: dates.length * car.rent.price,
+    total: dates.length * car.price,
     multiple: dates.length,
   };
   async function handleComplete() {
@@ -115,16 +115,16 @@ export function SchedulingDetails() {
           </Description>
 
           <Rent>
-            <Period>{car.rent.period}</Period>
-            <Price>R$ {car.rent.price}</Price>
+            <Period>{car.period}</Period>
+            <Price>R$ {car.price}</Price>
           </Rent>
         </Datails>
         <Accessories>
-          {car.accessories.map((accerrosy) => (
+          {car.accessories.map((accessory) => (
             <Accessory
-              key={accerrosy.type}
-              name={accerrosy.name}
-              icon={getAccessoryIcon(accerrosy.type)}
+              key={accessory.type}
+              name={accessory.name}
+              icon={getAccessoryIcon(accessory.type)}
             />
           ))}
         </Accessories>
@@ -158,7 +158,7 @@ export function SchedulingDetails() {
           <RentalPriceLabel>TOTAL</RentalPriceLabel>
           <RentalPricesDetails>
             <RentalPriceQuota>
-              {`R$ ${car.rent.price} x${rentData.multiple} daily`}
+              {`R$ ${car.price} x${rentData.multiple} daily`}
             </RentalPriceQuota>
             <RentalPriceTotal>R$ {rentData.total}</RentalPriceTotal>
           </RentalPricesDetails>

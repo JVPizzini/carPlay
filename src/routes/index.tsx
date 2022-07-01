@@ -5,10 +5,13 @@ import { useAuth } from "../hooks/auth";
 //Routs
 import { AppTabRoutes } from "./app.tab.routes";
 import { AuthRoutes } from "./auth.routes";
+import { Load } from "../components/Load";
 
 export function Routes() {
-  const { user } = useAuth();
-  return (
+  const { user, isLoading } = useAuth();
+  return isLoading ? (
+    <Load />
+  ) : (
     <NavigationContainer>
       {user.id ? <AppTabRoutes /> : <AuthRoutes />}
     </NavigationContainer>

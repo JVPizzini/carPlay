@@ -5,7 +5,7 @@ import { Container } from "./styles";
 
 interface Props extends TextProps {
   color?: string;
-  msg?: string;
+  msg: string;
 }
 
 export function Error({ msg, color, ...rest }: Props) {

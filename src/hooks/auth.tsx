@@ -8,6 +8,7 @@ import React, {
 import api from "../services/api";
 import { database } from "../database";
 import { User as ModalUser } from "../database/model/User";
+import { BooleanSchema } from "yup";
 
 //interfaces and types
 interface User {
@@ -27,6 +28,8 @@ interface AuthContextData {
   user: User;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => Promise<void>;
+  updatedUser: (user: User) => Promise<void>;
+  isLoading: Boolean;
 }
 interface AuthProviderProps {
   children: ReactNode;
@@ -35,6 +38,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [data, setData] = useState<User>({} as User);
+  const [isLoading, setIsLoading] = useState(true);
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
@@ -77,15 +81,19 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function updateUser(){
+  async function updatedUser(user: User) {
     try {
       const userColletion = database.get<ModalUser>("users");
-      await database.write(async() =>{
-        // const userSelected = await userColletion.find(user.)
-      })
-    } catch (error) {
-      
-    }
+      await database.write(async () => {
+        const userSelected = await userColletion.find(data.id);
+        await userSelected.update((userData) => {
+          (userData.name = user.name),
+            (userData.email = user.email),
+            (userData.avatar = user.avatar);
+        });
+        setData(user);
+      });
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -100,6 +108,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         ] = `Bearer ${userData.token}`;
 
         setData(userData);
+        setIsLoading(false);
       }
     }
 
@@ -112,6 +121,8 @@ function AuthProvider({ children }: AuthProviderProps) {
         user: data,
         signIn,
         signOut,
+        updatedUser,
+        isLoading,
       }}
     >
       {children}
